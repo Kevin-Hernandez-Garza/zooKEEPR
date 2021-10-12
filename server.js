@@ -7,6 +7,8 @@ const {animals} = require('./data/animals');
 // instantiating the server 
 const app = express();
 
+const PORT = process.env.PORT || 3001;
+
 // filtering functionality through the animals, returning a new filtered array 
 function filterByQuery(query, animalsArray){
     let personalityTraitsArray = [];
@@ -57,6 +59,6 @@ app.get('/api/animals', (req,res) => {
 });
 
 // make the server listen for requests
-app.listen(3001, () => {
+app.listen(PORT, () => {
     console.log(`API server now on port 3001!`);
 });
