@@ -1,23 +1,14 @@
 // import the file-system library to write data to to animals.json
 const fs = require('fs');
 const path = require('path');
-
-// load the express module
-const express = require('express');
-
-// requiring the animals data 
-const {animals} = require('./data/animals');
-
-// environment variable  
-const PORT = process.env.PORT || 3001;
-
-// instantiating the server 
-const app = express();
+const express = require('express'); // load the express module
+const {animals} = require('./data/animals'); // requiring the animals data   
+const PORT = process.env.PORT || 3001; // environment variable
+const app = express(); // instantiating the server 
 
 //parse incoming string or array data. mounting function to pass through, known as middleware
 app.use(express.urlencoded({extended:true}));
-// parse incoming JSON data
-app.use(express.json());
+app.use(express.json()); // parse incoming JSON data
 
 // filtering functionality through the animals, returning a new filtered array 
 function filterByQuery(query, animalsArray){
@@ -59,15 +50,6 @@ function filterByQuery(query, animalsArray){
     return filteredResults;
 }
 
-// adding the route
-app.get('/api/animals', (req,res) => {
-    let results = animals;
-    if(req.query) {
-        results = filterByQuery(req.query, results);
-    }
-    res.json(results);
-});
-
 // function that returns a single animal object
 function findById(id, animalsArray) {
     const result = animalsArray.filter(animal => animal.id === id)[0];
@@ -104,6 +86,15 @@ function validateAnimal(animal) {
     }
     return true;
 }
+
+// adding the route
+app.get('/api/animals', (req,res) => {
+    let results = animals;
+    if(req.query) {
+        results = filterByQuery(req.query, results);
+    }
+    res.json(results);
+});
 
 // adding the :id to a new route using req.params
 // a param route must always come after the other GET route
