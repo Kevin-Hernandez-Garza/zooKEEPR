@@ -6,6 +6,9 @@ const {animals} = require('./data/animals'); // requiring the animals data
 const PORT = process.env.PORT || 3001; // environment variable
 const app = express(); // instantiating the server 
 
+
+// middleware that instructs the server to make files available and not gate them behind a server endpoint
+app.use(express.static('public'));
 //parse incoming string or array data. mounting function to pass through, known as middleware
 app.use(express.urlencoded({extended:true}));
 app.use(express.json()); // parse incoming JSON data
@@ -121,6 +124,28 @@ app.post('/api/animals', (req,res) => {
     res.json(req.body);
     }
 });
+
+// route to serve the index.html file
+app.get('/', (req,res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// route to serve the animals.html file
+app.get('/animals', (req,res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+// route to serve the zookeeper.html file 
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+// route to serve errors if route requested doesn't exist
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+
 
 // make the server listen for requests
 app.listen(PORT, () => {
